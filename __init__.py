@@ -2,8 +2,8 @@ bl_info = {
     "name": "GP Canvas Addon",
     "description": "Easy way to move and rotate the Grease Pencil canvas to improve sketching in 3D space workflow",
     "author": "Bruno Perdigão",
-    "version": (1, 0),
-    "blender": (2, 90, 1),
+    "version": (0, 1),
+    "blender": (2, 93, 20),
     "location": "View3D",
     "category": "3D View"}
 
