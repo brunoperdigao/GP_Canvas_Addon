@@ -4,47 +4,7 @@ from bpy.props import IntProperty, FloatProperty
 from mathutils import Vector
 from ..utility.ray import mouse_raycast_to_plane
 from ..utility.draw import draw_quad, draw_text, get_blf_text_dims
-
-"""
-!!! POR FAZER !!!
-
-    * Fazer com que o plano de interseção sempre esteja com o normal voltado pra câmera
-    * Implementar a opção do ESC cancelar
-    * Implementar o Middle Mouse como exceção durante o modal
-    * Implementar a opção de digitar X, Y, Z para travar em um dos eixos
-    * Implementar o shift + X, Y, Z
-    * Implementar input de número para definir a posição final quando em um eixo só.
-    * Implementar um hotkey para inicializar o operador
-    * Criar feedback visual das dimensões digitadas.
-    * Criar um operador para rotação
-    * Colocar opção de digitar números e shader 2d no operador de rotação
-    \ Implementar o shift como fator pra diminuir a intensidade do mouse na rotação
-        - Consegui no rotate. O move tá complicado pq ele choca com a função do shift na escolha dos eixos
-        - Perguntar no stack exchange.
-    \ Implementar o "=". Quando for apertado significa que vou substituir o valor e não somar, como é o padrão. Fazer isso tanto no move como no rotate.
-        ---> Falta criar um feedback visual pra isso.
-    - Implementar a possibilidade de mover o mouse infinitamente (aquele algoritmo de quando chega no fim da tela e volta)
-    - Criar um menu no sidebar com o operador
-    - Adicionar um botão de criar nova grease pencil (ou colocar no add grease pencil convencional do blender?) que já venha com configuração do canvas atrelado ao 3d cursor
-    - Adicionar no menu a possibilidade de salvar locations e nomear
-    - Adicionar no menu um "last position" como se fosse um crtl+z do 3d cursor
-    - Adicionar no menu um "reset" pra colocar tudo no zero.
-    - Incorporar ao menu itens já existentes do canvas, scale, offset, subdivisions e color
-    - Criar feedback visual para os eixos demarcados
-    - Fazer anotações no código
-    - Criar um operador com raycast to scene. Que se alinhe ao objecto apontado pelo mouse. Tipo o Sculpt.
-
-    BUGFIX:
-    - Revisar a maneira como ele pega a posição do mouse. Como em alguns casos ele está confiando na visão 3d
-    ele não funciona tão bem quando estou numa vista plana (1, 3 e 7 do numpad, por exemplo).
-    - Operador não funciona quando Screen tem 3 3d_Viewport, cada uma com uma camera diferente (). (VER O STACKEXCHANGE QUE EU SALVEI NO NOTION)
-    (Se eu fecho as três janelas e depois monto de novo ele funciona)
-
-    REFACTOR
-    - Melhora a relação como input numérico é construído. No momento tem um pra ser utilizado na modificação no momento da confirmação e outro pra aparecer no Draw
-
-"""
-
+from ..utility.get_mouse3d_pos import get_mouse3d_pos
 
 class GPC_OT_Canvas_Move(bpy.types.Operator):
     """ Move the canvas in 3D space """
@@ -73,7 +33,7 @@ class GPC_OT_Canvas_Move(bpy.types.Operator):
         self.x_init = context.scene.cursor.location.x
         self.y_init = context.scene.cursor.location.y
         self.z_init = context.scene.cursor.location.z
-        self.mouse3d_pos = Vector((0, 0, 0))
+        self.mouse3d_pos = Vector((0, 0, 0))        
         self.axis_type = 'PLANE'
         # Changes the way it handles de input numbers. See CONFIRM section
         self.equal_mode = False
@@ -123,8 +83,10 @@ class GPC_OT_Canvas_Move(bpy.types.Operator):
                         self.mouse3d_pos = Vector(
                             (self.x_init, self.y_init, self.z_init + self.number_output))
                 context.scene.cursor.location = self.mouse3d_pos
+            # call utility function that will work with the Operator for last position
+            get_mouse3d_pos(self.mouse3d_pos)
             # removes shader after the operator is finished
-            self.remove_shaders(context)
+            self.remove_shaders(context)            
             return {'FINISHED'}
 
         # CANCEL
@@ -332,3 +294,6 @@ class GPC_OT_Canvas_Move(bpy.types.Operator):
         x = left_offset + padding
         y = bottom_offset + padding
         draw_text(text=text, x=x, y=y, size=font_size, color=(1, 1, 1, 1))
+
+    def send_mouse3d_pos(self):
+        return self.x_init, self.y_init, self.z_init
