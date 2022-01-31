@@ -12,13 +12,16 @@ def register_keymap():
 
     km = kc.keymaps.new(name='3D View', space_type='VIEW_3D')
     kmi = km.keymap_items.new('gp_canvas.canvas_move', 'G', 'PRESS')
-    #kmi.properties.name = 'GPC_OT_Cursor3d_Move'
     keys.append((km, kmi))
 
     km = kc.keymaps.new(name='3D View', space_type='VIEW_3D')
     kmi = km.keymap_items.new('gp_canvas.canvas_rotate', 'R', 'PRESS')
     keys.append((km, kmi))
 
+    km = kc.keymaps.new(name='3D View', space_type='VIEW_3D')
+    kmi = km.keymap_items.new('wm.call_menu', 'G', 'PRESS', ctrl=True)
+    kmi.properties.name = 'GPC_MT_Main_Menu'
+    keys.append((km, kmi))
 
 def unregister_keymap():
 

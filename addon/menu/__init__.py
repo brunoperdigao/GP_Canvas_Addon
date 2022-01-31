@@ -1,9 +1,11 @@
 import bpy
 
 from .main_menu import GPC_MT_Main_Menu
+from .main_panel import GPC_PT_Main_Panel
 
 classes = (
     GPC_MT_Main_Menu,
+    GPC_PT_Main_Panel
 )
 
 

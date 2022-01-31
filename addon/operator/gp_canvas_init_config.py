@@ -24,6 +24,8 @@ class GPC_OT_Canvas_Config(bpy.types.Operator):
         bpy.context.object.data.grid.offset = [0, 0]
         bpy.context.object.data.grid.lines = 5     
         bpy.context.object.data.grid.color = (0.5, 0.5, 0.5)
+        bpy.context.space_data.overlay.gpencil_grid_opacity = 0.5
+
 
 
         return {'FINISHED'}
