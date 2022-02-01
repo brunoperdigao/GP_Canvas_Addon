@@ -8,6 +8,7 @@ class GPC_PT_Main_Panel(bpy.types.Panel):
     bl_region_type = 'UI'
     bl_category = "GP Canvas"
 
+
     def draw(self, context):
 
         '''@classmethod
@@ -22,7 +23,7 @@ class GPC_PT_Main_Panel(bpy.types.Panel):
         layout = self.layout
 
         layout.operator_context = 'INVOKE_DEFAULT'
-        layout.label(text='GP Canvas')
+        layout.label(text='Main')
 
         new_gpencil = "object.gpencil_add"
 
@@ -52,4 +53,51 @@ class GPC_PT_Main_Panel(bpy.types.Panel):
         canvas = context.space_data.overlay
         layout.prop(canvas, 'use_gpencil_grid', text='Canvas')
         layout.prop(canvas, 'gpencil_grid_opacity')
+        
+
+class GPC_PT_Views_Panel(bpy.types.Panel):
+    bl_idname = "GPC_PT_Views_Panel"
+    bl_label = "GP Saved Canvas"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = "GP Canvas"
+    
+
+    def draw(self, context):
+
+        # just to avoid repeating self and writing just layout in the next lines
+        layout = self.layout
+
+        layout.operator_context = 'INVOKE_DEFAULT'
+        layout.label(text='Choose a saved view')
+
+        layout.operator('gp_canvas.get_view', text='Save New View')
+
+        layout.prop(context.scene, "gp_canvas_enum", text="Choose a View")
+
+        layout.operator('gp_canvas.go_to_view', text='Go To View')
+        layout.operator('gp_canvas.update_value', text='Update Value')
+        layout.operator('gp_canvas.update_name', text='Update Name')
+
+class GPC_PT_Saved_Views(bpy.types.Panel):
+    bl_idname = "GPC_PT_Saved_Views"
+    bl_label = "List of Views"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = "GP Canvas"
+    bl_parent_id = "GPC_PT_Views_Panel"
+    
+
+    def draw(self, context):      
+        
+        layout = self.layout
+        layout.operator_context = 'INVOKE_DEFAULT'
+
+        # Saved Views
+        saved_view = context.scene.gp_canvas_prop
+        #layout.prop(saved_view, "my_enum", text="")
+        for item in saved_view:
+            layout.prop(item, "name", text="")
+            #layout.prop(item, "value")
+            #layout.enable=False
         

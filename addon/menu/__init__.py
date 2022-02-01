@@ -1,11 +1,14 @@
 import bpy
 
-from .main_menu import GPC_MT_Main_Menu
-from .main_panel import GPC_PT_Main_Panel
+from .main_menu import GPC_MT_Main_Menu, GPC_MT_Name_Input
+from .main_panel import GPC_PT_Main_Panel, GPC_PT_Views_Panel, GPC_PT_Saved_Views
 
 classes = (
     GPC_MT_Main_Menu,
-    GPC_PT_Main_Panel
+    GPC_MT_Name_Input,
+    GPC_PT_Main_Panel,
+    GPC_PT_Views_Panel,
+    GPC_PT_Saved_Views
 )
 
 

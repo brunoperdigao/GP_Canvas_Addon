@@ -2,6 +2,10 @@ import bpy
 
 
 def register_addon():
+    # Properties
+    from ..property import register_properties
+    register_properties()
+    
     # Menus
     from ..menu import register_menus
     register_menus()
@@ -16,6 +20,10 @@ def register_addon():
 
 
 def unregister_addon():
+    # Properties
+    from ..property import unregister_properties
+    unregister_properties()
+    
     # Menus
     from ..menu import unregister_menus
     unregister_menus()
