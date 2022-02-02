@@ -8,7 +8,7 @@ from .gp_canvas_reset_rotation import GPC_OT_Reset_Rotation
 from .gp_canvas_last_position import GPC_OT_Last_Position
 #from .gp_canvas_go_to_view import GPC_OT_Go_To_View
 #from .gp_canvas_get_view import GPC_OT_Get_View
-from .gp_canvas_saved_views import GPC_OT_Get_View, GPC_OT_Go_To_View, GPC_OT_Update_Value, GPC_OT_Update_Name
+from .gp_canvas_saved_views import GPC_OT_Get_View, GPC_OT_Go_To_View, GPC_OT_Update_Value, GPC_OT_Update_Name, GPC_OT_Update_Own_Value
 
 classes = (
     GPC_OT_Canvas_Move,
@@ -20,7 +20,8 @@ classes = (
     GPC_OT_Go_To_View,
     GPC_OT_Get_View,
     GPC_OT_Update_Value,
-    GPC_OT_Update_Name
+    GPC_OT_Update_Name,
+    GPC_OT_Update_Own_Value
 )
 
 

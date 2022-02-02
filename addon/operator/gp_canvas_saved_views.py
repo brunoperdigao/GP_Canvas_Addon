@@ -1,5 +1,6 @@
 import bpy
 from mathutils import Vector
+from itertools import count
 
 
 class GPC_OT_Get_View(bpy.types.Operator):
@@ -9,7 +10,7 @@ class GPC_OT_Get_View(bpy.types.Operator):
     bl_label = "GP Canvas Get View"
     bl_option = {'REGISTER'}
 
-    
+    index: bpy.props.IntProperty(name="index", default=0)
 
     @classmethod
     def poll(self, context):
@@ -23,6 +24,8 @@ class GPC_OT_Get_View(bpy.types.Operator):
         newItem = context.scene.gp_canvas_prop.add()
         newItem.name = "view"
         newItem.value = bpy.context.scene.cursor.location
+        newItem.index = self.index
+        self.index += 1
                 
 
         return {'FINISHED'}
@@ -122,5 +125,33 @@ class GPC_OT_Update_Name(bpy.types.Operator):
             if tuple(item.value) == eval(selected_view): 
                 #item.name = "New Name"
                 bpy.ops.wm.call_menu(name="GPC_MT_Name_Input")
+
+        return {'FINISHED'}
+
+class GPC_OT_Update_Own_Value(bpy.types.Operator):
+    """ Updated the saved view name """
+
+    bl_idname = "gp_canvas.update_own_value"
+    bl_label = "GP Canvas Update Own Value"
+    bl_option = {'REGISTER'}
+
+    index: bpy.props.IntProperty(name="index", default=0)
+
+    @classmethod
+    def poll(self, context):
+        # only run if in grease pencil draw mode
+        if context.mode == 'PAINT_GPENCIL':
+            return True
+        else:
+            return False
+
+    def execute(self, context):
+        
+        list_of_views = context.scene.gp_canvas_prop
+        # Convert String to Tuple
+        # using map() + tuple() + int + split()
+
+        list_of_views[self.index].value = bpy.context.scene.cursor.location
+
 
         return {'FINISHED'}

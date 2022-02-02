@@ -21,38 +21,47 @@ class GPC_PT_Main_Panel(bpy.types.Panel):
 
         # just to avoid repeating self and writing just layout in the next lines
         layout = self.layout
-
         layout.operator_context = 'INVOKE_DEFAULT'
-        layout.label(text='Main')
+
+        # Main Config
+        box1 = layout.box()
+        box1_title = box1.row()
+        box1_title.label(text="Convas Config")
+        main_column = box1.column(align=True)    
 
         new_gpencil = "object.gpencil_add"
-
-        # Operators
-        layout.operator(new_gpencil, text='Add Grease Pencil Object', icon='GP_SELECT_STROKES')
-        layout.operator('gp_canvas.init_config', text='Initial Configuration', icon='SOLO_OFF')
-
-        layout.operator('gp_canvas.canvas_move', text='Canvas Move', icon='ORIENTATION_LOCAL')
-        layout.operator('gp_canvas.canvas_rotate', text='Canvas Rotate', icon='ORIENTATION_GIMBAL')
+        main_column.operator(new_gpencil, text='Add Grease Pencil Object', icon='GP_SELECT_STROKES')
+        main_column.operator('gp_canvas.init_config', text='Initial Configuration', icon='SOLO_OFF')
         
-        layout.operator('gp_canvas.reset_position', text='Reset Position', icon='VIEW_ORTHO')
-        layout.operator('gp_canvas.reset_rotation', text='Reset Rotation', icon='MOD_LATTICE')
-        
-        layout.operator('gp_canvas.last_position', text='Last Position', icon='RECOVER_LAST')
-
-
-
-
-        # Properties
+        # Canvas Properties
         obj = context.active_object.name # Get the active object name as a string to use to get the property
         grid = bpy.data.grease_pencils[obj].grid # Get the grid from the current active object
         # It will only create these properties if a grease pencil object is selected
-        layout.prop(grid, 'color')
-        layout.prop(grid, 'scale')
-        layout.prop(grid, 'lines')
+        canvas_column = box1.column(align=True)
+
+        canvas_column.prop(grid, 'color')
+        canvas_column.prop(grid, 'scale')
+        canvas_column.prop(grid, 'lines')
 
         canvas = context.space_data.overlay
-        layout.prop(canvas, 'use_gpencil_grid', text='Canvas')
-        layout.prop(canvas, 'gpencil_grid_opacity')
+        visibility_column = box1.column()
+        visibility_column.prop(canvas, 'use_gpencil_grid', text='Canvas Visibility')
+        visibility_column.prop(canvas, 'gpencil_grid_opacity')
+
+       
+        box2 = layout.box()
+        box2_title = box2.row()
+        box2_title.label(text="Canvas Movement")
+        operators_column = box2.column(align=True)
+        operators_column.operator('gp_canvas.canvas_move', text='Canvas Move', icon='ORIENTATION_LOCAL')
+        operators_column.operator('gp_canvas.canvas_rotate', text='Canvas Rotate', icon='ORIENTATION_GIMBAL')
+        operators_column.operator('gp_canvas.reset_position', text='Reset Position', icon='VIEW_ORTHO')
+        operators_column.operator('gp_canvas.reset_rotation', text='Reset Rotation', icon='MOD_LATTICE')
+        operators_column.operator('gp_canvas.last_position', text='Last Position', icon='RECOVER_LAST')
+
+
+
+
         
 
 class GPC_PT_Views_Panel(bpy.types.Panel):
@@ -98,6 +107,14 @@ class GPC_PT_Saved_Views(bpy.types.Panel):
         #layout.prop(saved_view, "my_enum", text="")
         for item in saved_view:
             layout.prop(item, "name", text="")
-            #layout.prop(item, "value")
-            #layout.enable=False
+            layout.prop(item, "index", text="")
+            button = layout.operator('gp_canvas.update_own_value', text="Update Value")
+            button.index = item.index
+
+            
+        
+        # TESTE!!!!
+        # Saved Views
+        
+    
         

@@ -10,6 +10,7 @@ class GPC_SavedViews(bpy.types.PropertyGroup):
     )'''
     name: bpy.props.StringProperty(name="Name", default="Position")
     value: bpy.props.FloatVectorProperty(name="Value", default=(0, 0, 0))
+    index: bpy.props.IntProperty(name="Index", default=0)
     
 
 def create_enum_items(self, context):
@@ -23,6 +24,7 @@ def create_enum_items(self, context):
         enum_list.append(data)
 
     return enum_list
+
 
 '''def update_items(self, context, name, value):
     for item in context.scene.gp_canvas_prop:
