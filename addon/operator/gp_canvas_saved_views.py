@@ -1,6 +1,5 @@
 import bpy
 from mathutils import Vector
-from itertools import count
 
 
 class GPC_OT_Get_View(bpy.types.Operator):
@@ -23,13 +22,86 @@ class GPC_OT_Get_View(bpy.types.Operator):
     def execute(self, context):
         newItem = context.scene.gp_canvas_prop.add()
         newItem.name = "view"
-        newItem.value = bpy.context.scene.cursor.location
+        newItem.position = bpy.context.scene.cursor.location
+        newItem.rotation = bpy.context.scene.cursor.rotation_euler
         newItem.index = self.index
         self.index += 1
                 
 
         return {'FINISHED'}
 
+class GPC_OT_Delete_View(bpy.types.Operator):
+    """ Deleted selected saved view """
+
+    bl_idname = "gp_canvas.delete_view"
+    bl_label = "GP Canvas Delete View"
+    bl_option = {'REGISTER'}
+
+    index: bpy.props.IntProperty(name="index", default=0)
+
+    @classmethod
+    def poll(self, context):
+        # only run if in grease pencil draw mode
+        if context.mode == 'PAINT_GPENCIL':
+            return True
+        else:
+            return False
+
+    def execute(self, context):
+        
+        item = context.scene.gp_canvas_prop[self.index]
+        item.deleted = True
+                        
+
+        return {'FINISHED'}
+
+class GPC_OT_Delete_All_Views(bpy.types.Operator):
+    """ Deleted selected saved view """
+
+    bl_idname = "gp_canvas.delete_all_views"
+    bl_label = "GP Canvas Delete AllViews"
+    bl_option = {'REGISTER'}
+
+    @classmethod
+    def poll(self, context):
+        # only run if in grease pencil draw mode
+        if context.mode == 'PAINT_GPENCIL':
+            return True
+        else:
+            return False
+
+    def execute(self, context):
+       
+        for item in context.scene.gp_canvas_prop:
+            item.deleted = True
+       
+                
+
+        return {'FINISHED'}
+
+class GPC_OT_Go_To_Own_View(bpy.types.Operator):
+    """ Go to selected saved view """
+
+    bl_idname = "gp_canvas.go_to_own_view"
+    bl_label = "GP Canvas Go To Own View"
+    bl_option = {'REGISTER'}
+
+    index: bpy.props.IntProperty(name="index", default=0)
+
+    @classmethod
+    def poll(self, context):
+        # only run if in grease pencil draw mode
+        if context.mode == 'PAINT_GPENCIL':
+            return True
+        else:
+            return False
+
+    def execute(self, context):
+        saved_view = context.scene.gp_canvas_prop
+        bpy.context.scene.cursor.location = saved_view[self.index].position
+        bpy.context.scene.cursor.rotation_euler = saved_view[self.index].rotation
+
+        return {'FINISHED'}
 
 class GPC_OT_Go_To_View(bpy.types.Operator):
     """ Go to selected saved view """
@@ -38,7 +110,6 @@ class GPC_OT_Go_To_View(bpy.types.Operator):
     bl_label = "GP Canvas Go To View"
     bl_option = {'REGISTER'}
 
-    
 
     @classmethod
     def poll(self, context):
@@ -57,7 +128,6 @@ class GPC_OT_Go_To_View(bpy.types.Operator):
 
 
         return {'FINISHED'}
-
 
 class GPC_OT_Update_Value(bpy.types.Operator):
     """ Updates saved view value """
@@ -151,7 +221,7 @@ class GPC_OT_Update_Own_Value(bpy.types.Operator):
         # Convert String to Tuple
         # using map() + tuple() + int + split()
 
-        list_of_views[self.index].value = bpy.context.scene.cursor.location
-
+        list_of_views[self.index].position = bpy.context.scene.cursor.location
+        list_of_views[self.index].rotation = bpy.context.scene.cursor.rotation_euler
 
         return {'FINISHED'}

@@ -9,8 +9,10 @@ class GPC_SavedViews(bpy.types.PropertyGroup):
         items=[create_enum_items()]
     )'''
     name: bpy.props.StringProperty(name="Name", default="Position")
-    value: bpy.props.FloatVectorProperty(name="Value", default=(0, 0, 0))
+    position: bpy.props.FloatVectorProperty(name="Position", default=(0, 0, 0))
+    rotation: bpy.props.FloatVectorProperty(name="Rotation", default=(0, 0, 0))
     index: bpy.props.IntProperty(name="Index", default=0)
+    deleted: bpy.props.BoolProperty(name="Deleted", default=False)
     
 
 def create_enum_items(self, context):
@@ -18,7 +20,7 @@ def create_enum_items(self, context):
 
     for item in context.scene.gp_canvas_prop:
         name = item.name
-        value = tuple(item.value)
+        value = item.position # !!!! ISSO TÁ QUEBRADO ver como eu faço pra passar position e rotation juntos
         data = (str(value), name, name)
 
         enum_list.append(data)
