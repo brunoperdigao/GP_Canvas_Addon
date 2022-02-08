@@ -11,16 +11,9 @@ class GPC_SavedViews(bpy.types.PropertyGroup):
     name: bpy.props.StringProperty(name="Name", default="Position")
     position: bpy.props.FloatVectorProperty(name="Position", default=(0, 0, 0))
     rotation: bpy.props.FloatVectorProperty(name="Rotation", default=(0, 0, 0))
+    # creates and index so that it can be used by update_own_value and go_to_own_view
     index: bpy.props.IntProperty(name="Index", default=0)
+    # this property is used to deleted a view from the panel. It actually just hides it so that the index count continues the same
     deleted: bpy.props.BoolProperty(name="Deleted", default=False)
     
 
-
-'''def update_items(self, context, name, value):
-    for item in context.scene.gp_canvas_prop:
-        if name == item.name
-            item.value = value
-
-        enum_list.append(data)
-
-    return enum_list'''

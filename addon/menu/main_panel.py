@@ -34,7 +34,7 @@ class GPC_PT_Main_Panel(bpy.types.Panel):
         main_column.operator('gp_canvas.init_config', text='Initial Configuration', icon='SOLO_OFF')
         
         # Canvas Properties
-        # The if structure prevents the menu from trying to get the canvas property before entering the draw mode
+        # The 'if' structure prevents the menu from trying to get the canvas property before entering the draw mode
         if context.mode == 'PAINT_GPENCIL':
             grid = context.object.data.grid
             canvas_column = box1.column(align=True)
@@ -45,15 +45,7 @@ class GPC_PT_Main_Panel(bpy.types.Panel):
             canvas_column.prop(grid, 'lines')
         else:
             pass
-        ### grid = context.object.data.grid # Get the grid from the current object
-        # It will only create these properties if a grease pencil object is selected
-        '''canvas_column = box1.column(align=True)
-
-        canvas_column.prop(grid, 'color')
-        canvas_grid = canvas_column.grid_flow(columns=2)
-        canvas_grid.prop(grid, 'scale')
-        canvas_column.prop(grid, 'lines')'''
-
+        
         canvas = context.space_data.overlay
         visibility_column = box1.column()
         visibility_column.prop(canvas, 'use_gpencil_grid', text='Canvas Visibility')
@@ -95,15 +87,6 @@ class GPC_PT_Views_Panel(bpy.types.Panel):
         layout.operator('gp_canvas.get_view', text='Save New View')
         layout.operator('gp_canvas.delete_all_views', text='Delete All Views')
 
-        # DELETE
-        '''layout.prop(context.scene, "gp_canvas_enum", text="Choose a View")
-
-        if not context.scene.gp_canvas_enum:
-            layout.label(text='No saved view')
-        else:    
-            layout.operator('gp_canvas.go_to_view', text='Go To View')
-            layout.operator('gp_canvas.update_value', text='Update Value')
-            layout.operator('gp_canvas.update_name', text='Update Name')'''
 
 class GPC_PT_Saved_Views(bpy.types.Panel):
     bl_idname = "GPC_PT_Saved_Views"
@@ -123,6 +106,8 @@ class GPC_PT_Saved_Views(bpy.types.Panel):
         saved_view = context.scene.gp_canvas_prop
         #layout.prop(saved_view, "my_enum", text="")
         for item in saved_view:
+            # this works with the Delete Operators. It assures that the panel only shows views that are False in the property "delete"
+            # it's a combination of property, operator and panel
             if item.deleted == True:
                 pass
             else:
@@ -154,6 +139,7 @@ class GPC_PT_Cursor_Properties(bpy.types.Panel):
     bl_region_type = 'UI'
     bl_category = "GP Canvas"
     
+    # this is copied from the blender default view panel
 
     def draw(self, context):
         layout = self.layout

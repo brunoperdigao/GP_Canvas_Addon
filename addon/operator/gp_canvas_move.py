@@ -29,7 +29,8 @@ class GPC_OT_Canvas_Move(bpy.types.Operator):
         self.number_options = {'0', '1', '2', '3',
                                '4', '5', '6', '7', '8', '9', '.'}  # Em teste
         self.number_input = []
-        self.number_output = '###'
+        self.number_output = ''
+        self.prefix = "dim: "
         self.x_init = context.scene.cursor.location.x
         self.y_init = context.scene.cursor.location.y
         self.z_init = context.scene.cursor.location.z
@@ -147,11 +148,12 @@ class GPC_OT_Canvas_Move(bpy.types.Operator):
                 self.number_input = ['-'] + self.number_input
             self.number_output = ''.join(self.number_input)
             context.area.tag_redraw()
-            print("---", self.number_output)
 
         # This will allow to fill the value as a final output, and not an add value
         # Check the CONFIRM section
         elif event.type == 'EQUAL':
+            self.prefix = "(absolute) dim: "
+            context.area.tag_redraw()
             self.equal_mode = True
 
         # MOUSE MOVE
@@ -268,7 +270,7 @@ class GPC_OT_Canvas_Move(bpy.types.Operator):
     def draw_shaders_2d(self, context):
 
         # Props
-        text = str(self.number_output)
+        text = self.prefix + str(self.number_output)
         font_size = 14
         dims = get_blf_text_dims(text, font_size)
         area_width = context.area.width

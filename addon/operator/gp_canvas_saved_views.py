@@ -3,12 +3,13 @@ from mathutils import Vector
 
 
 class GPC_OT_Get_View(bpy.types.Operator):
-    """ Get selected saved view """
+    """ Save current view """
 
     bl_idname = "gp_canvas.get_view"
     bl_label = "GP Canvas Get View"
     bl_option = {'REGISTER'}
 
+    # creates and index so that it can be used by update_own_value and go_to_own_view
     index: bpy.props.IntProperty(name="index", default=0)
 
     @classmethod
@@ -37,6 +38,8 @@ class GPC_OT_Delete_View(bpy.types.Operator):
     bl_label = "GP Canvas Delete View"
     bl_option = {'REGISTER'}
 
+    # index is called in the main panel, so that the operator acts in the related property.
+    # the properties are a collection, so the index assures that the right one is being chosen.
     index: bpy.props.IntProperty(name="index", default=0)
 
     @classmethod
@@ -86,6 +89,8 @@ class GPC_OT_Go_To_Own_View(bpy.types.Operator):
     bl_label = "GP Canvas Go To Own View"
     bl_option = {'REGISTER'}
 
+    # index is called in the main panel, so that the operator acts in the related property.
+    # the properties are a collection, so the index assures that the right one is being chosen.
     index: bpy.props.IntProperty(name="index", default=0)
 
     @classmethod
@@ -141,6 +146,8 @@ class GPC_OT_Update_Own_Value(bpy.types.Operator):
     bl_label = "GP Canvas Update Own Value"
     bl_option = {'REGISTER'}
 
+    # index is called in the main panel, so that the operator acts in the related property.
+    # the properties are a collection, so the index assures that the right one is being chosen.
     index: bpy.props.IntProperty(name="index", default=0)
 
     @classmethod

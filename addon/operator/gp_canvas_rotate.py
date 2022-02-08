@@ -28,7 +28,8 @@ class GPC_OT_Canvas_Rotate(bpy.types.Operator):
         self.number_options = {'0', '1', '2', '3',
                                '4', '5', '6', '7', '8', '9', '.'}
         self.number_input = []
-        self.number_output = '###'
+        self.number_output = ''
+        self.prefix = "angle: "
         self.x_init = context.scene.cursor.rotation_euler.x
         self.y_init = context.scene.cursor.rotation_euler.y
         self.z_init = context.scene.cursor.rotation_euler.z
@@ -139,7 +140,10 @@ class GPC_OT_Canvas_Rotate(bpy.types.Operator):
         # This will allow to fill the value as a final output, and not an add value
         # Check the CONFIRM section
         elif event.type == 'EQUAL':
+            self.prefix = "(absolute) angle: "
+            context.area.tag_redraw()
             self.equal_mode = True
+            
 
         # MOUSE MOVE
         elif event.type == 'MOUSEMOVE':
@@ -208,7 +212,7 @@ class GPC_OT_Canvas_Rotate(bpy.types.Operator):
     def draw_shaders_2d(self, context):
 
         # Props
-        text = str(self.number_output)
+        text = self.prefix + str(self.number_output)
         font_size = 14
         dims = get_blf_text_dims(text, font_size)
         area_width = context.area.width
