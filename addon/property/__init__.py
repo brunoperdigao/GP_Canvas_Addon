@@ -1,6 +1,6 @@
 import bpy
 
-from .saved_views import GPC_SavedViews, create_enum_items
+from .saved_views import GPC_SavedViews
 
 
 classes = (
@@ -12,7 +12,6 @@ def register_properties():
     from bpy.utils import register_class
     for cls in classes:
         register_class(cls)
-    bpy.types.Scene.gp_canvas_enum = bpy.props.EnumProperty(items=create_enum_items)
     bpy.types.Scene.gp_canvas_prop = bpy.props.CollectionProperty(type=GPC_SavedViews)
 
 
@@ -21,4 +20,3 @@ def unregister_properties():
     for cls in reversed(classes):
         unregister_class(cls)
     del bpy.types.Scene.gp_canvas_prop
-    del bpy.types.Scene.gp_canvas_enum

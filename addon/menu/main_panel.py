@@ -95,14 +95,15 @@ class GPC_PT_Views_Panel(bpy.types.Panel):
         layout.operator('gp_canvas.get_view', text='Save New View')
         layout.operator('gp_canvas.delete_all_views', text='Delete All Views')
 
-        layout.prop(context.scene, "gp_canvas_enum", text="Choose a View")
+        # DELETE
+        '''layout.prop(context.scene, "gp_canvas_enum", text="Choose a View")
 
         if not context.scene.gp_canvas_enum:
             layout.label(text='No saved view')
         else:    
             layout.operator('gp_canvas.go_to_view', text='Go To View')
             layout.operator('gp_canvas.update_value', text='Update Value')
-            layout.operator('gp_canvas.update_name', text='Update Name')
+            layout.operator('gp_canvas.update_name', text='Update Name')'''
 
 class GPC_PT_Saved_Views(bpy.types.Panel):
     bl_idname = "GPC_PT_Saved_Views"

@@ -15,18 +15,6 @@ class GPC_SavedViews(bpy.types.PropertyGroup):
     deleted: bpy.props.BoolProperty(name="Deleted", default=False)
     
 
-def create_enum_items(self, context):
-    enum_list = []
-
-    for item in context.scene.gp_canvas_prop:
-        name = item.name
-        value = item.position # !!!! ISSO TÁ QUEBRADO ver como eu faço pra passar position e rotation juntos
-        data = (str(value), name, name)
-
-        enum_list.append(data)
-
-    return enum_list
-
 
 '''def update_items(self, context, name, value):
     for item in context.scene.gp_canvas_prop:
