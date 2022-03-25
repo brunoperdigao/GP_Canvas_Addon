@@ -26,12 +26,22 @@ class GPC_PT_Main_Panel(bpy.types.Panel):
         # Main Config
         box1 = layout.box()
         box1_title = box1.row()
-        box1_title.label(text="Convas Config")
+        box1_title.label(text="Canvas Config")
         main_column = box1.column(align=True)    
 
-        new_gpencil = "object.gpencil_add"
-        main_column.operator(new_gpencil, text='Add Grease Pencil Object', icon='GP_SELECT_STROKES')
+        # Adds new grease pencil with some specific configuration
+        
+        main_column.operator('gp_canvas.new_stroke_gp', text='Add GP Object for Stroke', icon='GP_SELECT_STROKES')
+        main_column.operator('gp_canvas.new_fill_gp', text='Add GP Object for Fill', icon='BRUSH_DATA')
         main_column.operator('gp_canvas.init_config', text='Initial Configuration', icon='SOLO_OFF')
+        
+        view = context.scene.view_settings
+        main_column.prop(view, 'view_transform', text = "Color Management")
+
+        background = bpy.context.space_data.shading
+        main_column.prop(background, 'background_type')
+        main_column.prop(background, 'background_color')
+
         
         # Canvas Properties
         # The 'if' structure prevents the menu from trying to get the canvas property before entering the draw mode
