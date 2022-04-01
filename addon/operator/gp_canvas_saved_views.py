@@ -22,7 +22,7 @@ class GPC_OT_Get_View(bpy.types.Operator):
 
     def execute(self, context):
         newItem = context.scene.gp_canvas_prop.add()
-        newItem.name = "view"
+        newItem.name = "VIEW." + str(self.index)
         newItem.position = bpy.context.scene.cursor.location
         newItem.rotation = bpy.context.scene.cursor.rotation_euler
         newItem.index = self.index

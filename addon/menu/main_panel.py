@@ -33,16 +33,20 @@ class GPC_PT_Main_Panel(bpy.types.Panel):
         
         main_column.operator('gp_canvas.new_stroke_gp', text='Add GP Object for Stroke', icon='GP_SELECT_STROKES')
         main_column.operator('gp_canvas.new_fill_gp', text='Add GP Object for Fill', icon='BRUSH_DATA')
-        main_column.operator('gp_canvas.init_config', text='Initial Configuration', icon='SOLO_OFF')
+        
         
         view = context.scene.view_settings
-        main_column.prop(view, 'view_transform', text = "Color Management")
+        main_column.label(text='Color Management:')
+        main_column.prop(view, 'view_transform', text = "")
 
         background = bpy.context.space_data.shading
-        main_column.prop(background, 'background_type')
+        main_column.label(text='Background Type:')
+        main_column.prop(background, 'background_type', text='')
         main_column.prop(background, 'background_color')
 
-        
+        main_column.label(text='')
+        main_column.operator('gp_canvas.canvas_config', text='Canvas Configuration', icon='SOLO_OFF')
+
         # Canvas Properties
         # The 'if' structure prevents the menu from trying to get the canvas property before entering the draw mode
         if context.mode == 'PAINT_GPENCIL':
@@ -96,6 +100,11 @@ class GPC_PT_Views_Panel(bpy.types.Panel):
 
         layout.operator('gp_canvas.get_view', text='Save New View')
         layout.operator('gp_canvas.delete_all_views', text='Delete All Views')
+        
+        # 'show_details' property is defined in init.py in property folder
+        wm = context.window_manager
+        layout.prop(wm, 'show_details', text='Show Details', toggle=-1)
+        
 
 
 class GPC_PT_Saved_Views(bpy.types.Panel):
@@ -112,6 +121,7 @@ class GPC_PT_Saved_Views(bpy.types.Panel):
         layout = self.layout
         layout.operator_context = 'INVOKE_DEFAULT'
         
+        wm = context.window_manager
         # Saved Views
         saved_view = context.scene.gp_canvas_prop
         #layout.prop(saved_view, "my_enum", text="")
@@ -131,16 +141,19 @@ class GPC_PT_Saved_Views(bpy.types.Panel):
                 button_delete = row.operator('gp_canvas.delete_view', text="", icon="TRASH")
                 button_delete.index = item.index
                 
-                box = layout.box()
-                box_col = box.column(align=True)
-                position = tuple(item.position)
-                position_str = str((round(position[0],2), round(position[1],2), round(position[2],2)))
-                rotation = tuple(item.rotation)
-                rotation_degrees = [math.degrees(item)%360 for item in rotation]
-                rotation_str = str((round(rotation_degrees[0],2), round(rotation_degrees[1],2), round(rotation_degrees[2],2)))
-                # print(rotation_degrees)
-                box_col.label(text="pos:" + position_str)
-                box_col.label(text="rot:" + rotation_str)
+                if wm.show_details == False:
+                    pass
+                else:
+                    box = layout.box()
+                    box_col = box.column(align=True)
+                    position = tuple(item.position)
+                    position_str = str((round(position[0],2), round(position[1],2), round(position[2],2)))
+                    rotation = tuple(item.rotation)
+                    rotation_degrees = [math.degrees(item)%360 for item in rotation]
+                    rotation_str = str((round(rotation_degrees[0],2), round(rotation_degrees[1],2), round(rotation_degrees[2],2)))
+                    # print(rotation_degrees)
+                    box_col.label(text="pos:" + position_str)
+                    box_col.label(text="rot:" + rotation_str)
 
 class GPC_PT_Cursor_Properties(bpy.types.Panel):
     bl_idname = "GPC_PT_Cursor_Properties"

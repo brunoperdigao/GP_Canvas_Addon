@@ -13,6 +13,7 @@ def register_properties():
     for cls in classes:
         register_class(cls)
     bpy.types.Scene.gp_canvas_prop = bpy.props.CollectionProperty(type=GPC_SavedViews)
+    bpy.types.WindowManager.show_details = bpy.props.BoolProperty()
 
 
 def unregister_properties():

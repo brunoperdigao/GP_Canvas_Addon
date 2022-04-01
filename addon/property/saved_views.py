@@ -16,4 +16,5 @@ class GPC_SavedViews(bpy.types.PropertyGroup):
     # this property is used to deleted a view from the panel. It actually just hides it so that the index count continues the same
     deleted: bpy.props.BoolProperty(name="Deleted", default=False)
     
+ 
 

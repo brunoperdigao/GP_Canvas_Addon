@@ -5,7 +5,7 @@ class GPC_OT_Canvas_Config(bpy.types.Operator):
 
     """ Initial Configuration of the Canvas """
 
-    bl_idname = "gp_canvas.init_config"
+    bl_idname = "gp_canvas.canvas_config"
     bl_label = "GP Canvas Initial Configuration"
     bl_option = {'REGISTER'}
 
@@ -38,6 +38,14 @@ class GPC_OT_New_Stroke_GP_Object(bpy.types.Operator):
     bl_label = "GP Canvas New Grease Pencil for stroke"
     bl_option = {'REGISTER'}
 
+    @classmethod
+    def poll(self, context):
+        # only run if in object mode
+        if context.mode == 'OBJECT':
+            return True
+        else:
+            return False
+
     def execute(self, context):
         bpy.ops.object.gpencil_add(type='EMPTY')
         bpy.context.object.use_grease_pencil_lights = False
@@ -52,6 +60,14 @@ class GPC_OT_New_Fill_GP_Object(bpy.types.Operator):
     bl_idname = "gp_canvas.new_fill_gp"
     bl_label = "GP Canvas New Grease Pencil for fill"
     bl_option = {'REGISTER'}
+
+    @classmethod
+    def poll(self, context):
+        # only run if in object mode
+        if context.mode == 'OBJECT':
+            return True
+        else:
+            return False    
 
     def execute(self, context):
         bpy.ops.object.gpencil_add(type='EMPTY')
