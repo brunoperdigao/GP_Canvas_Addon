@@ -33,6 +33,7 @@ class GPC_OT_Canvas_Rotate(bpy.types.Operator):
         self.x_init = context.scene.cursor.rotation_euler.x
         self.y_init = context.scene.cursor.rotation_euler.y
         self.z_init = context.scene.cursor.rotation_euler.z
+        self.coord_init = (self.x_init, self.y_init, self.z_init)
         self.mouse3d_rotation = Vector((0, 0, 0))
         self.axis_type = 'PLANE'
         # Changes the way it handles de input numbers. See CONFIRM section
@@ -47,6 +48,13 @@ class GPC_OT_Canvas_Rotate(bpy.types.Operator):
         return {'RUNNING_MODAL'}
 
     def modal(self, context, event):
+        
+        def set_mouse_pos(equal_input, sum_input):
+            if self.equal_mode:
+                self.mouse3d_rotation = (Vector(self.coord_init) * Vector(sum_input)) + Vector(equal_input)
+            else:
+                coord = Vector(self.coord_init) + Vector(equal_input)
+                self.mouse3d_rotation = Vector(coord)
 
         # PASS
         if event.type == 'MIDDLEMOUSE':
@@ -62,26 +70,11 @@ class GPC_OT_Canvas_Rotate(bpy.types.Operator):
                     self.number_output = radians(float(self.number_output))
                     print('depois do enter', self.number_input)
                 if self.axis_type == 'X_AXIS':
-                    if self.equal_mode:
-                        self.mouse3d_rotation = Vector(
-                            (self.number_output, self.y_init, self.z_init))
-                    else:
-                        self.mouse3d_rotation = Vector(
-                            (self.x_init + self.number_output, self.y_init, self.z_init))
-                if self.axis_type == 'Y_AXIS':
-                    if self.equal_mode:
-                        self.mouse3d_rotation = Vector(
-                            (self.x_init, self.number_output, self.z_init))
-                    else:
-                        self.mouse3d_rotation = Vector(
-                            (self.x_init, self.y_init + self.number_output, self.z_init))
-                if self.axis_type == 'Z_AXIS':
-                    if self.equal_mode:
-                        self.mouse3d_rotation = Vector(
-                            (self.x_init, self.y_init, self.number_output))
-                    else:
-                        self.mouse3d_rotation = Vector(
-                            (self.x_init, self.y_init, self.z_init + self.number_output))
+                    set_mouse_pos(((self.number_output), 0, 0), (0, 1, 1))
+                elif self.axis_type == 'Y_AXIS':
+                    set_mouse_pos((0, (self.number_output), 0), (1, 0, 1))
+                elif self.axis_type == 'Z_AXIS':
+                    set_mouse_pos((0, 0, (self.number_output)), (1, 1, 0))
                 context.scene.cursor.rotation_euler = self.mouse3d_rotation
             # removes shader after the operator is finished
             self.remove_shaders(context)
@@ -111,7 +104,7 @@ class GPC_OT_Canvas_Rotate(bpy.types.Operator):
         # For each keyboard input it turns the number input list into a joined output.
         # It has a tag_redraw so the number on the screen updates everytime a key is pressed and goes to the output
         elif event.ascii:  # Talvez ao invés de usar o ascii seja melhor usar um set de events type com números, ponto, sinal de negativo e backspace.
-            if self.axis_type == 'X_AXIS' or self.axis_type == 'Y_AXIS' or self.axis_type == 'Z_AXIS':  # Checa se eles tá no modo eixo
+            if self.axis_type in {'X_AXIS', 'Y_AXIS', 'Z_AXIS'}:  # Checa se eles tá no modo eixo
                 if event.ascii in self.number_options:  # Checa se o input do teclado é numero ou vírgula
                     # Vai criando uma lista com cada input do teclado para formar um número. Como implementar o backspace?
                     self.number_input.append(event.ascii)
