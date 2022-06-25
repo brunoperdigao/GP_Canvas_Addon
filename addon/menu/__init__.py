@@ -1,14 +1,14 @@
 import bpy
 
 from .main_menu import GPC_MT_Main_Menu, GPC_MT_Name_Input
-from .main_panel import GPC_PT_Main_Panel, GPC_PT_Views_Panel, GPC_PT_Saved_Views, GPC_PT_Cursor_Properties
+from .main_panel import GPC_PT_Main_Panel, GPC_PT_Canvas_Panel, GPC_PT_Saved_Canvas, GPC_PT_Cursor_Properties
 
 classes = (
     GPC_MT_Main_Menu,
     GPC_MT_Name_Input,
     GPC_PT_Main_Panel,
-    GPC_PT_Views_Panel,
-    GPC_PT_Saved_Views,
+    GPC_PT_Canvas_Panel,
+    GPC_PT_Saved_Canvas,
     GPC_PT_Cursor_Properties
 )
 

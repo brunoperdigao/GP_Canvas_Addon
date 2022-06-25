@@ -2,14 +2,14 @@ import bpy
 from mathutils import Vector
 
 
-class GPC_OT_Get_View(bpy.types.Operator):
-    """ Save current view """
+class GPC_OT_Get_Canvas(bpy.types.Operator):
+    """ Save current canvas """
 
-    bl_idname = "gp_canvas.get_view"
-    bl_label = "GP Canvas Get View"
+    bl_idname = "gp_canvas.get_canvas"
+    bl_label = "GP Canvas Get Canvas"
     bl_option = {'REGISTER'}
 
-    # creates and index so that it can be used by update_own_value and go_to_own_view
+    # creates and index so that it can be used by update_own_value and go_to_own_canvas
     index: bpy.props.IntProperty(name="index", default=0)
 
     @classmethod
@@ -22,7 +22,7 @@ class GPC_OT_Get_View(bpy.types.Operator):
 
     def execute(self, context):
         newItem = context.scene.gp_canvas_prop.add()
-        newItem.name = "VIEW." + str(self.index)
+        newItem.name = "Canvas." + str(self.index)
         newItem.position = bpy.context.scene.cursor.location
         newItem.rotation = bpy.context.scene.cursor.rotation_euler
         newItem.index = self.index
@@ -31,11 +31,11 @@ class GPC_OT_Get_View(bpy.types.Operator):
 
         return {'FINISHED'}
 
-class GPC_OT_Delete_View(bpy.types.Operator):
-    """ Deleted selected saved view """
+class GPC_OT_Delete_Canvas(bpy.types.Operator):
+    """ Deleted selected saved canvas """
 
-    bl_idname = "gp_canvas.delete_view"
-    bl_label = "GP Canvas Delete View"
+    bl_idname = "gp_canvas.delete_canvas"
+    bl_label = "GP Canvas Delete Canvas"
     bl_option = {'REGISTER'}
 
     # index is called in the main panel, so that the operator acts in the related property.
@@ -58,11 +58,11 @@ class GPC_OT_Delete_View(bpy.types.Operator):
 
         return {'FINISHED'}
 
-class GPC_OT_Delete_All_Views(bpy.types.Operator):
-    """ Deleted selected saved view """
+class GPC_OT_Delete_All_Canvas(bpy.types.Operator):
+    """ Deleted selected saved canvas """
 
-    bl_idname = "gp_canvas.delete_all_views"
-    bl_label = "GP Canvas Delete AllViews"
+    bl_idname = "gp_canvas.delete_all_canvas"
+    bl_label = "GP Canvas Delete All Canvas"
     bl_option = {'REGISTER'}
 
     @classmethod
@@ -82,11 +82,11 @@ class GPC_OT_Delete_All_Views(bpy.types.Operator):
 
         return {'FINISHED'}
 
-class GPC_OT_Go_To_Own_View(bpy.types.Operator):
-    """ Go to selected saved view """
+class GPC_OT_Go_To_Own_Canvas(bpy.types.Operator):
+    """ Go to selected saved canvas """
 
-    bl_idname = "gp_canvas.go_to_own_view"
-    bl_label = "GP Canvas Go To Own View"
+    bl_idname = "gp_canvas.go_to_own_canvas"
+    bl_label = "GP Canvas Go To Own Canvas"
     bl_option = {'REGISTER'}
 
     # index is called in the main panel, so that the operator acts in the related property.
@@ -102,14 +102,14 @@ class GPC_OT_Go_To_Own_View(bpy.types.Operator):
             return False
 
     def execute(self, context):
-        saved_view = context.scene.gp_canvas_prop
-        bpy.context.scene.cursor.location = saved_view[self.index].position
-        bpy.context.scene.cursor.rotation_euler = saved_view[self.index].rotation
+        saved_canvas = context.scene.gp_canvas_prop
+        bpy.context.scene.cursor.location = saved_canvas[self.index].position
+        bpy.context.scene.cursor.rotation_euler = saved_canvas[self.index].rotation
 
         return {'FINISHED'}
 
 class GPC_OT_Update_Name(bpy.types.Operator):
-    """ Updated the saved view name """
+    """ Updated the saved canvas name """
 
     bl_idname = "gp_canvas.update_name"
     bl_label = "GP Canvas Update Name"
@@ -126,21 +126,21 @@ class GPC_OT_Update_Name(bpy.types.Operator):
             return False
 
     def execute(self, context):
-        selected_view = context.scene.gp_canvas_enum
-        list_of_views = context.scene.gp_canvas_prop
+        selected_canvas = context.scene.gp_canvas_enum
+        list_of_canvas = context.scene.gp_canvas_prop
         # Convert String to Tuple
         # using map() + tuple() + int + split()
-        for item in list_of_views:
+        for item in list_of_canvas:
             # item.value comes in a strange format so I changed to tuple
-            # selected_view comes as a string, so I use eval to parse as a tuple of numbers
-            if tuple(item.value) == eval(selected_view): 
+            # selected_canvas comes as a string, so I use eval to parse as a tuple of numbers
+            if tuple(item.value) == eval(selected_canvas): 
                 #item.name = "New Name"
                 bpy.ops.wm.call_menu(name="GPC_MT_Name_Input")
 
         return {'FINISHED'}
 
 class GPC_OT_Update_Own_Value(bpy.types.Operator):
-    """ Updated the saved view name """
+    """ Updated the saved canvas name """
 
     bl_idname = "gp_canvas.update_own_value"
     bl_label = "GP Canvas Update Own Value"
@@ -160,11 +160,11 @@ class GPC_OT_Update_Own_Value(bpy.types.Operator):
 
     def execute(self, context):
         
-        list_of_views = context.scene.gp_canvas_prop
+        list_of_canvas = context.scene.gp_canvas_prop
         # Convert String to Tuple
         # using map() + tuple() + int + split()
 
-        list_of_views[self.index].position = bpy.context.scene.cursor.location
-        list_of_views[self.index].rotation = bpy.context.scene.cursor.rotation_euler
+        list_of_canvas[self.index].position = bpy.context.scene.cursor.location
+        list_of_canvas[self.index].rotation = bpy.context.scene.cursor.rotation_euler
 
         return {'FINISHED'}
